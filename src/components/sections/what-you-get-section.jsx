@@ -48,7 +48,7 @@ export function WhatYouGetSection() {
 
         {/* Right Side - Content */}
         <div className="relative text-white flex items-center py-16 md:py-24">
-          <div className="flex flex-col justify-center items-center w-full mx-auto md:pr-8 lg:pr-12 relative z-10">
+          <div className="flex flex-col justify-center items-center w-full mx-auto p-4 md:pr-8 lg:pr-12 relative z-10">
             <AnimateOnScroll animation="slideLeft" delay={0.3} duration={0.8}>
               <div className='w-full flex flex-col justify-center items-center'>
                 {/* Title */}
