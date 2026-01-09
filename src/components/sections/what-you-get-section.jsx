@@ -50,7 +50,7 @@ export function WhatYouGetSection() {
         <div className="relative text-white flex items-center py-16 md:py-24">
           <div className="flex flex-col justify-center items-center w-full pr-4 md:pr-8 lg:pr-12 relative z-10">
             <AnimateOnScroll animation="slideLeft" delay={0.3} duration={0.8}>
-              <div>
+              <div className='w-full flex flex-col justify-center items-center'>
                 {/* Title */}
                 <h2 className="text-3xl md:text-4xl lg:text-4xl font-bold mb-8 md:mb-12 leading-tight">
                   <span className="text-white block mb-2 lg:whitespace-nowrap">O QUE VOCÊ RECEBE SENDO UM</span>
@@ -58,6 +58,8 @@ export function WhatYouGetSection() {
                 </h2>
 
                 {/* Benefits List */}
+                <div className='w-full'>
+
                 <ul className="space-y-3 md:space-y-4">
                   {benefits.map((benefit, index) => (
                     <AnimateOnScroll 
@@ -73,6 +75,7 @@ export function WhatYouGetSection() {
                     </AnimateOnScroll>
                   ))}
                 </ul>
+                </div>
               </div>
             </AnimateOnScroll>
           </div>
