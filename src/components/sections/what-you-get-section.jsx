@@ -52,7 +52,7 @@ export function WhatYouGetSection() {
             <AnimateOnScroll animation="slideLeft" delay={0.3} duration={0.8}>
               <div className='w-full flex flex-col justify-center items-center'>
                 {/* Title */}
-                <h2 className="text-3xl md:text-4xl lg:text-4xl font-bold mb-8 md:mb-12 leading-tight">
+                <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-8 md:mb-12 leading-tight">
                   <span className="text-white block mb-2 lg:whitespace-nowrap">O QUE VOCÊ RECEBE SENDO UM</span>
                   <span className="text-black bg-white px-3 py-2 rounded-lg inline-block">LICENCIADO 3FIT?</span>
                 </h2>
