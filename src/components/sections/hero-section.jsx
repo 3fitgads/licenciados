@@ -93,7 +93,7 @@ export function HeroSection() {
         </div>
 
         {/* title.png with bg.png - Below in mobile */}
-        <div className="relative w-full h-[60vh] min-h-[300px] flex items-center justify-center overflow-hidden">
+        <div className="relative w-full h-[60vh] min-h-[300px] flex items-center justify-center">
           <div className="relative w-full h-full p-2">
             <Image
               src="/bg.png"

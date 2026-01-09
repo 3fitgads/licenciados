@@ -438,7 +438,7 @@ export function RegistrationFormSection() {
 
                   <form onSubmit={handleSubmit}>
                     {/* Step Content */}
-                    <div className="px-6 md:px-8 pb-6 md:pb-8 min-h-[200px] flex items-center" style={{ position: 'relative', overflow: 'hidden', isolation: 'isolate' }}>
+                    <div className="px-6 md:px-8 pb-4 min-h-[120px] flex items-center" style={{ position: 'relative', overflow: 'hidden', isolation: 'isolate' }}>
                       <AnimatePresence mode="wait" custom={direction} initial={false}>
                         <motion.div
                           key={currentStep}
@@ -462,18 +462,19 @@ export function RegistrationFormSection() {
                     </div>
 
                     {/* Navigation Buttons */}
-                    <div className="px-6 md:px-8 pb-6 md:pb-8 space-y-4">
-                      <div className="flex gap-3">
-                        {currentStep > 1 && (
+                    <div className="px-6 md:px-8 pb-4 space-y-4">
+                      <div className="flex gap-3 justify-between">
+                        {currentStep > 1 ? (
                           <Button
                             type="button"
                             onClick={handleBack}
-                            variant="outline"
-                            className="flex-1 md:flex-initial flex items-center justify-center gap-2 text-gray-dark border-gray-300 hover:bg-gray-50"
-                          >
+                            variant="white"
+                            className="flex-1 md:flex-initial text-[#FF7033] flex items-center justify-center gap-2 hover:!bg-gray-100 normal-case"                          >
                             <ArrowLeft className="w-4 h-4" />
-                            <span>Voltar</span>
+                            <span>VOLTAR</span>
                           </Button>
+                        ) : (
+                          <div></div>
                         )}
                         
                         {currentStep < TOTAL_STEPS ? (
@@ -481,7 +482,7 @@ export function RegistrationFormSection() {
                             type="button"
                             onClick={handleNext}
                             variant="primary"
-                            className="flex-1 md:flex-initial flex items-center justify-center gap-2 ml-auto"
+                            className="flex-1 md:flex-initial flex items-center justify-center gap-2"
                           >
                             <span>Próximo</span>
                             <ArrowRight className="w-4 h-4" />
@@ -490,7 +491,7 @@ export function RegistrationFormSection() {
                           <Button
                             type="submit"
                             variant="primary"
-                            className="flex-1 md:flex-initial ml-auto w-full md:w-auto"
+                            className="flex-1 md:flex-initial w-full md:w-auto"
                           >
                             QUERO COMEÇAR AGORA
                           </Button>
