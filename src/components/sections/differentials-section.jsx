@@ -62,13 +62,14 @@ export function DifferentialsSection() {
         </AnimateOnScroll>
 
         {/* Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 max-w-7xl mx-auto px-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 max-w-full w-full mx-auto px-4">
           {differentials.map((differential, index) => (
             <AnimateOnScroll
               key={index}
               animation="slideLeft"
               delay={0.2 + (index * 0.1)}
               duration={0.6}
+              className="md:w-[33vw] lg:w-[25vw]"
             >
               <div className="bg-white rounded-lg p-4 md:p-6 flex items-center gap-4 shadow-lg">
                 {/* Icon */}

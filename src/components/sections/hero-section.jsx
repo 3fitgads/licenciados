@@ -35,9 +35,9 @@ export function HeroSection() {
     document.getElementById('vantagens')?.scrollIntoView({ behavior: 'smooth' });
   };
   return (
-    <section id="vantagens" className="relative text-white md:pb-32 overflow-hidden pt-0 scroll-mt-20">
+    <section id="vantagens" className="relative text-white md:pb-4 overflow-hidden pt-0 scroll-mt-20">
       <div className="absolute hidden md:block inset-0 z-10 md:overflow-visible pointer-events-none" style={{ bottom: '-120px' }}>
-        <div className="absolute right-0 top-0 bottom-[50%] lg:bottom-[25%] w-full md:w-full md:origin-top-right ">
+        <div className="absolute right-0 top-0 bottom-[50%] xl:bottom-[25%] w-full md:w-full md:origin-top-right ">
           <Image
             src="/influencers.png"
             alt="Mini mercado 3FIT com geladeira, freezer, totem de pagamento e estrutura"
@@ -45,13 +45,18 @@ export function HeroSection() {
             sizes="100vw"
             className="object-cover md:object-contain object-right"
             priority
-          />
+          />         
+        </div>
+      </div>
+
+      <div className="absolute hidden md:block inset-0 z-10 md:overflow-visible pointer-events-none" style={{ bottom: '-120px' }}>
+        <div className="absolute right-0 top-0 bottom-[50%] lg:bottom-[25%] w-full md:w-full md:origin-top-right ">        
           <Image
             src="/marmita.webp"
             alt=""
             fill
             sizes="50vw"
-            className="object-contain object-center !h-[60%] z-10 hidden md:block translate-y-10 translate-x-[3vw]"
+            className="object-contain object-center !h-[60%] z-10 hidden md:block translate-y-10 translate-x-[4vw]"
             priority
           />
         </div>
@@ -60,20 +65,12 @@ export function HeroSection() {
 
       {/* Hero Images - Side by Side */}
       <div className="w-full z-10">
-        <div className="hidden md:grid grid-cols-1 md:grid-cols-[45%_55%] w-full min-h-screen md:min-h-[500px] gap-0">
+        <div className="hidden md:grid grid-cols-1 md:grid-cols-[50%_50%] w-full min-h-screen md:min-h-[500px] gap-0">
           {/* Left Side - Title/Text Image */}
           <div className="relative w-full h-full min-h-[300px] md:min-h-[500px] flex md:items-center justify-center md:p-8 z-20">
             <div className="relative flex flex-col w-full max-w-full md:max-w-screen h-full items-center justify-center">
               {/* Title Image on top - estrutura original mantida */}
-              <div className="relative flex flex-col w-full aspect-square md:aspect-auto h-[80%] md:h-[80%]">
-                <Image
-                  src="/influencers.png"
-                  alt="Mini mercado 3FIT com geladeira, freezer, totem de pagamento e estrutura"
-                  fill
-                  sizes="100vw"
-                  className="md:hidden block object-contain object-right z-10"
-                  priority
-                />
+              <div className="relative flex flex-col w-full aspect-square md:aspect-auto h-[40vh]">
                 <Image
                   src="/title-logo.png"
                   alt="3FIT Market - Seja um licenciado"
@@ -84,39 +81,58 @@ export function HeroSection() {
                 />
                 {/* bg.png removido - usando componente Bg global */}
               </div>
+              <div className="relative flex flex-col w-full aspect-square md:aspect-auto !max-h-[1vh]">
+                <Image
+                  src="/influencers.png"
+                  alt="Mini mercado 3FIT com geladeira, freezer, totem de pagamento e estrutura"
+                  fill
+                  sizes="100vw"
+                  className="md:hidden block object-contain object-right z-10"
+                  priority
+                />
+                {/* bg.png removido - usando componente Bg global */}
+              </div>
 
               {/* Textos abaixo do title-logo - Desktop only */}
-              <div className="hidden md:flex flex-col gap-4 w-full min-w-screen text-white px-4 z-50 translate-y-[6rem]">
+              <div className="relative hidden md:flex gap-4 w-full min-w-screen text-white px-4 z-50 translate-x-2">
                 {/* Título principal */}
-                <h2 className="text-lg md:text-xl font-bold text-center leading-tight">
-                  {/* Mobile: 4 linhas */}
-                  <span className="lg:hidden whitespace-nowrap block">Seja dono do <span className="font-extrabold uppercase bg-black px-1 text-[#FF8D00]">SEU PRÓPRIO NEGÓCIO</span></span>
-                  <span className="lg:hidden whitespace-nowrap block">de alimentação saudável, torne-se</span>
-                  <span className="lg:hidden whitespace-nowrap block">hoje mesmo o mais novo licenciado da</span>
-                  <span className="lg:hidden whitespace-nowrap block">3Fit.</span>
 
-                  {/* Desktop (md+): 3 linhas */}
-                  <span className="hidden lg:block whitespace-nowrap">Seja dono do <span className="font-extrabold uppercase bg-black px-1 text-[#FF8D00]">SEU PRÓPRIO NEGÓCIO</span> de alimentação</span>
+                <div className="flex w-full items-center justify-center h-32">
+                  <h2 className="text-lg md:text-xl font-bold text-center leading-tight">
+                    {/* Mobile: 4 linhas */}
+                    <span className="whitespace-nowrap block">Seja dono do <span className="font-extrabold uppercase bg-black px-1 text-[#FF8D00]">SEU PRÓPRIO NEGÓCIO</span></span>
+                    <span className="whitespace-nowrap block">de alimentação saudável, torne-se</span>
+                    <span className="whitespace-nowrap block">hoje mesmo o mais novo licenciado da</span>
+                    <span className="whitespace-nowrap block">3Fit.</span>
+
+                    {/* Desktop (md+): 3 linhas */}
+                    {/* <span className="hidden lg:block whitespace-nowrap">Seja dono do <span className="font-extrabold uppercase bg-black px-1 text-[#FF8D00]">SEU PRÓPRIO NEGÓCIO</span> de alimentação</span>
                   <span className="hidden lg:block whitespace-nowrap">saudável, torne-se hoje mesmo o mais novo licenciado da</span>
-                  <span className="hidden lg:block whitespace-nowrap">3Fit.</span>
-                </h2>
+                  <span className="hidden lg:block whitespace-nowrap">3Fit.</span> */}
+                  </h2>                
+
+                </div>
+
 
                 {/* Bullet points com ícones circulares */}
-                <div className="flex flex-col gap-3 mt-2">
-                  {advantages.map((advantage, index) => {
-                    const IconComponent = advantage.icon;
-                    return (
-                      <div key={index} className="flex items-center gap-3">
-                        <div className="relative w-6 h-6 flex-shrink-0">
-                          <div className="absolute inset-0 rounded-full bg-black border-2 border-white"></div>
-                          <div className="absolute inset-0 flex items-center justify-center z-10">
-                            {IconComponent && <IconComponent className="w-3.5 h-3.5 text-[#FF8D00]" strokeWidth={2.5} />}
+                <div className="absolute flex h-32 w-screen sm:translate-x-12 lg:translate-x-0">                
+                  <div className="absolute xl:left-1/2 md:left-auto md:-translate-x-1/2 md:-right-10 xl:right-auto flex flex-col gap-3 mt-2">
+                    {advantages.map((advantage, index) => {
+                      const IconComponent = advantage.icon;
+                      return (
+                        <div key={index} className="flex items-center gap-3">
+                          <div className="relative w-6 h-6 flex-shrink-0">
+                            <div className="absolute inset-0 rounded-full bg-black border-2 border-white"></div>
+                            <div className="absolute inset-0 flex items-center justify-center z-10">
+                              {IconComponent && <IconComponent className="w-3.5 h-3.5 text-[#FF8D00]" strokeWidth={2.5} />}
+                            </div>
                           </div>
+                          <span className="text-sm md:text-base text-white font-semibold whitespace-nowrap">{advantage.title}</span>
                         </div>
-                        <span className="text-sm md:text-base text-white font-semibold whitespace-nowrap">{advantage.title}</span>
-                      </div>
-                    );
-                  })}
+                      );
+                    })}
+                  </div>
+
                 </div>
               </div>
             </div>
@@ -154,7 +170,7 @@ export function HeroSection() {
           </div>
         </div>
 
-        
+
       </div>
 
       {/* Wave at bottom - Desktop only */}

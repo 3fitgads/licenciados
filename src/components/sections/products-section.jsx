@@ -75,6 +75,8 @@ export function ProductsSection() {
         </svg>
       </div>
 
+      <div className='w-screen h-[2px] absolute top-0 left-0 bg-white -translate-y-[1px] z-50'></div>
+
     </section>
   );
 }
