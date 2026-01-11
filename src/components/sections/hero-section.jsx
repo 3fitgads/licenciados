@@ -120,7 +120,7 @@ export function HeroSection() {
         </div>
       </div>
       <div className="md:hidden flex flex-col w-full">
-        <div className="relative w-full h-[45vh] min-h-[300px]">
+        <div className="relative w-full h-[45svh] min-h-[300px]">
           <Image
             src="/influencers.png"
             alt="Mini mercado 3FIT com geladeira, freezer, totem de pagamento e estrutura"
@@ -132,7 +132,7 @@ export function HeroSection() {
         </div>
 
         {/* title.png with bg.png - Below in mobile */}
-        <div className="relative w-full h-[45vh] min-h-[300px] flex items-center justify-center">
+        <div className="relative w-full h-[45svh] min-h-[300px] flex items-center justify-center">
           <div className="relative w-full h-full p-2">
             {/* bg.png removido - usando componente Bg global */}
             <div className="relative w-full h-full flex flex-col items-center justify-center z-10">

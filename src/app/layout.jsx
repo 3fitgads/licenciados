@@ -18,6 +18,15 @@ export const metadata = {
   description: "Conquiste sua liberdade financeira com o modelo de negócio mais inovador do Brasil. Torne-se um licenciado 3FIT e transforme vidas através da nutrição.",
 };
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  viewportFit: "cover",
+  interactiveWidget: "resizes-content",
+};
+
 export default function RootLayout({ children }) {
   return (
     <html lang="pt-BR">

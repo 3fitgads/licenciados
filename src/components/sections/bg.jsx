@@ -4,61 +4,71 @@ import { useEffect, useState, useRef } from 'react';
 import Image from 'next/image';
 
 export function Bg() {
-  const [numberOfRepetitions, setNumberOfRepetitions] = useState(13);
+  const [numberOfRepetitions, setNumberOfRepetitions] = useState(6);
   const [blockHeight, setBlockHeight] = useState(0);
   const containerRef = useRef(null);
   const timeoutRef = useRef(null);
-  const lastRepsRef = useRef(13);
+  const lastHeightRef = useRef(0);
+  const lastRepsRef = useRef(6);
 
   useEffect(() => {
-    const calculateRepetitions = () => {
+    const calculateRepetitions = (immediate = false) => {
       if (typeof window !== 'undefined') {
         if (timeoutRef.current) clearTimeout(timeoutRef.current);
         
-        timeoutRef.current = setTimeout(() => {
+        const run = () => {
           requestAnimationFrame(() => {
             const parent = containerRef.current?.parentElement;
             if (!parent) return;
             
-            const height = parent.offsetHeight;
-            const vh50 = window.innerHeight / 2;
+            const currentHeight = parent.offsetHeight;
+            const currentVh50 = window.innerHeight / 2;
             
-            // Cada repetição ocupa 50vh (vh50 pixels)
-            const reps = Math.ceil(height / vh50);
-            
-            // Só atualiza se a diferença for maior que 1 ou se reps mudou e for muito diferente
-            // No mobile, pequenas variações de vh não devem triggerar re-render
-            if (Math.abs(reps - lastRepsRef.current) >= 1 || blockHeight === 0) {
-              setNumberOfRepetitions(reps);
-              setBlockHeight(vh50);
-              lastRepsRef.current = reps;
+            // Diferença significativa para evitar flicker (mais de 200px ou primeira carga)
+            const heightDiff = Math.abs(currentHeight - lastHeightRef.current);
+            const isFirstLoad = lastHeightRef.current === 0;
+
+            if (isFirstLoad || heightDiff > 200) {
+              const reps = Math.ceil(currentHeight / currentVh50);
+              
+              // Só atualiza o estado se o número de blocos realmente mudar
+              if (reps !== lastRepsRef.current || isFirstLoad) {
+                setNumberOfRepetitions(reps);
+                setBlockHeight(currentVh50);
+                lastRepsRef.current = reps;
+                lastHeightRef.current = currentHeight;
+              }
             }
           });
-        }, 150); // Debounce de 150ms
+        };
+
+        if (immediate) {
+          run();
+        } else {
+          timeoutRef.current = setTimeout(run, 300); // Debounce maior para estabilidade
+        }
       }
     };
 
-    // Inicializa o Observer
     const parent = containerRef.current?.parentElement;
     let resizeObserver;
     
     if (parent) {
-      resizeObserver = new ResizeObserver(calculateRepetitions);
+      resizeObserver = new ResizeObserver(() => calculateRepetitions(false));
       resizeObserver.observe(parent);
     }
 
-    // Recalcula quando a janela muda de tamanho (muda o valor de vh)
-    window.addEventListener('resize', calculateRepetitions);
+    window.addEventListener('resize', () => calculateRepetitions(false));
     
-    // Chamada inicial
-    calculateRepetitions();
+    // Chamada inicial imediata
+    calculateRepetitions(true);
 
     return () => {
       if (resizeObserver) resizeObserver.disconnect();
-      window.removeEventListener('resize', calculateRepetitions);
+      window.removeEventListener('resize', () => calculateRepetitions(false));
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
     };
-  }, [blockHeight]);
+  }, []); // Removida dependência de blockHeight para evitar loop de efeito
 
   return (
     <div 
@@ -67,15 +77,18 @@ export function Bg() {
     >
       {Array.from({ length: numberOfRepetitions }).map((_, index) => {
         const isEven = index % 2 === 0;
-        const topPosition = index * blockHeight;
+        
+        // Se ainda não calculamos o blockHeight em pixels, usamos svh como fallback inicial (mais estável no mobile)
+        const topPosition = blockHeight ? `${index * blockHeight}px` : `${index * 50}svh`;
+        const heightValue = blockHeight ? `${blockHeight}px` : `50svh`;
         
         return (
           <div
             key={index}
             className="absolute left-0 w-full overflow-hidden"
             style={{ 
-              top: `${topPosition}px`,
-              height: `${blockHeight}px`
+              top: topPosition,
+              height: heightValue
             }}
           >
             <Image
@@ -85,8 +98,8 @@ export function Bg() {
               className={`object-cover object-bottom ${
                 isEven ? '' : '[transform:rotate(180deg)scaleX(-1)]'
               }`}
-              priority={index < 2} // Prioridade apenas para as primeiras 2 imagens
-              loading={index < 4 ? 'eager' : 'lazy'} // Lazy loading para as demais
+              priority={index < 4} // Prioridade para as primeiras 4 imagens (200vh)
+              loading={index < 6 ? 'eager' : 'lazy'} // Carregamento rápido para o topo (300vh)
             />
           </div>
         );
