@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -231,62 +231,119 @@ export function RegistrationFormSection() {
     });
   }, [currentStep]);
 
-  const SuccessScreen = () => (
-    <motion.div
-      variants={successVariants}
-      initial="initial"
-      animate="animate"
-      exit="exit"
-      className="w-full py-12 px-6 md:px-8 flex flex-col items-center justify-center text-center"
-    >
-      {/* Animated Check Circle */}
-      <div className="relative mb-6">
-        <motion.div
-          variants={checkCircleVariants}
-          initial="initial"
-          animate="animate"
-          className="w-24 h-24 md:w-32 md:h-32 bg-primary rounded-full flex items-center justify-center mx-auto"
-        >
-          <motion.svg
-            width="48"
-            height="48"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="white"
-            strokeWidth="3"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="md:w-16 md:h-16"
-            style={{ overflow: 'visible' }}
-          >
-            <motion.path
-              d="M20 6L9 17l-5-5"
-              variants={checkIconVariants}
-              initial="initial"
-              animate="animate"
-              strokeDasharray="1"
-              strokeDashoffset="0"
-            />
-          </motion.svg>
-        </motion.div>
-      </div>
+  const SuccessScreen = ({ formData }) => {
+    const calendarRef = useRef(null);
 
-      {/* Success Message */}
+    // Construir URL do Calendly com pre-fill
+    const buildCalendlyUrl = () => {
+      const baseUrl = 'https://calendly.com/jhonathan_galhardo/30min?hide_gdpr_banner=1';
+      const params = new URLSearchParams();
+      
+      // Adiciona parâmetros de pre-fill
+      if (formData.name) {
+        params.append('name', formData.name);
+      }
+      if (formData.email) {
+        params.append('email', formData.email);
+      }
+      if (formData.phone) {
+        // Remove espaços e caracteres especiais do telefone
+        const cleanPhone = formData.phone.replace(/\s/g, '');
+        params.append('a1', cleanPhone);
+      }
+      
+      const queryString = params.toString();
+      return queryString ? `${baseUrl}&${queryString}` : baseUrl;
+    };
+
+    const calendlyUrl = buildCalendlyUrl();
+
+    // Scroll para o calendário quando o componente for montado
+    useEffect(() => {
+      if (calendarRef.current) {
+        setTimeout(() => {
+          calendarRef.current.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'center' 
+          });
+        }, 3000); // Aguarda a animação de sucesso completar
+      }
+    }, []);
+
+    return (
       <motion.div
-        variants={textVariants}
+        variants={successVariants}
         initial="initial"
         animate="animate"
-        className="space-y-3"
+        exit="exit"
+        className="w-full flex flex-col items-center"
       >
-        <h2 className="text-2xl md:text-3xl font-bold text-gray-dark">
-          Cadastro Realizado com Sucesso!
-        </h2>
-        <p className="text-base md:text-lg text-gray-medium max-w-md mx-auto">
-          Em breve entraremos em contato através do e-mail ou WhatsApp informado.
-        </p>
+        {/* Animated Check Circle */}
+        <div className="relative mb-6 px-6 md:px-8 pt-8">
+          <motion.div
+            variants={checkCircleVariants}
+            initial="initial"
+            animate="animate"
+            className="w-20 h-20 md:w-24 md:h-24 bg-primary rounded-full flex items-center justify-center mx-auto"
+          >
+            <motion.svg
+              width="40"
+              height="40"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="white"
+              strokeWidth="3"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="md:w-12 md:h-12"
+              style={{ overflow: 'visible' }}
+            >
+              <motion.path
+                d="M20 6L9 17l-5-5"
+                variants={checkIconVariants}
+                initial="initial"
+                animate="animate"
+                strokeDasharray="1"
+                strokeDashoffset="0"
+              />
+            </motion.svg>
+          </motion.div>
+        </div>
+
+        {/* Success Message */}
+        <motion.div
+          variants={textVariants}
+          initial="initial"
+          animate="animate"
+          className="space-y-3 text-center mb-6 px-6 md:px-8"
+        >
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-dark">
+            Cadastro Realizado com Sucesso!
+          </h2>
+          <p className="text-base md:text-lg text-gray-medium max-w-md mx-auto">
+            Inscrição realizada! Agora, agende sua reunião abaixo:
+          </p>
+        </motion.div>
+
+        {/* Calendly Iframe */}
+        <motion.div
+          ref={calendarRef}
+          variants={textVariants}
+          initial="initial"
+          animate="animate"
+          className="w-full bg-white rounded-2xl shadow-xl overflow-hidden"
+          style={{ minHeight: '800px', height: 'calc(100vh - 200px)' }}
+        >
+          <iframe
+            src={calendlyUrl}
+            style={{ border: 0, width: '100%', height: '100%', minHeight: '800px' }}
+            title="Agendar Reunião"
+            allowFullScreen
+          />
+        </motion.div>
       </motion.div>
-    </motion.div>
-  );
+    );
+  };
 
   const renderStep = () => {
     switch (currentStep) {
@@ -410,7 +467,7 @@ export function RegistrationFormSection() {
           <div className="bg-white rounded-b-2xl shadow-lg overflow-hidden" style={{ transform: 'none' }}>
             <AnimatePresence mode="wait">
               {isSubmitted ? (
-                <SuccessScreen key="success" />
+                <SuccessScreen key="success" formData={formData} />
               ) : (
                 <motion.div
                   key="form"
