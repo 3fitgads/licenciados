@@ -14,7 +14,7 @@ const geistMono = localFont({
 });
 
 export const metadata = {
-  title: "3FIT - Invista R$ 30 Mil e Fature Mais de R$ 150 Mil por Ano",
+  title: "Seu Próprio Negócio de Alimentação",
   description: "Conquiste sua liberdade financeira com o modelo de negócio mais inovador do Brasil. Torne-se um licenciado 3FIT e transforme vidas através da nutrição.",
 };
 

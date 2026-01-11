@@ -45,6 +45,7 @@ export function ProductsSection() {
                   src={product.image}
                   alt={`Produto ${index + 1}`}
                   fill
+                  sizes="(max-width: 768px) 100vw, 33vw"
                   className="object-cover"
                 />
               </div>

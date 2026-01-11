@@ -69,6 +69,7 @@ export function AdvantagesSection() {
                   src="/marmita.webp"
                   alt=""
                   fill
+                  sizes="100vw"
                   className="object-contain object-bottom !h-[100%] z-10 translate-y-10 translate-x-[5vw]"
                   priority
                 />

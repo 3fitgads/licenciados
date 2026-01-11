@@ -42,6 +42,7 @@ export function HeroSection() {
             src="/influencers.png"
             alt="Mini mercado 3FIT com geladeira, freezer, totem de pagamento e estrutura"
             fill
+            sizes="100vw"
             className="object-cover md:object-contain object-right"
             priority
           />
@@ -49,6 +50,7 @@ export function HeroSection() {
             src="/marmita.webp"
             alt=""
             fill
+            sizes="50vw"
             className="object-contain object-center !h-[60%] z-10 hidden md:block translate-y-10 translate-x-[3vw]"
             priority
           />
@@ -68,6 +70,7 @@ export function HeroSection() {
                   src="/influencers.png"
                   alt="Mini mercado 3FIT com geladeira, freezer, totem de pagamento e estrutura"
                   fill
+                  sizes="100vw"
                   className="md:hidden block object-contain object-right z-10"
                   priority
                 />
@@ -75,6 +78,7 @@ export function HeroSection() {
                   src="/title-logo.png"
                   alt="3FIT Market - Seja um licenciado"
                   fill
+                  sizes="100vw"
                   className="mt-10 md:mt-0 object-contain object-center z-10 !h-[70%] md:!h-[40vh]"
                   priority
                 />
@@ -125,6 +129,7 @@ export function HeroSection() {
             src="/influencers.png"
             alt="Mini mercado 3FIT com geladeira, freezer, totem de pagamento e estrutura"
             fill
+            sizes="100vw"
             className="object-contain object-center z-10"
             priority
           />
@@ -142,7 +147,7 @@ export function HeroSection() {
                   alt="3FIT Market - Seja um licenciado"
                   fill
                   className="object-contain object-center !h-[6rem] translate-x-10 -translate-y-14"
-                  sizes="100vw"
+                  sizes="(max-width: 768px) 100vw, 50vw"
                   priority
                 />
                 <Image
@@ -150,7 +155,7 @@ export function HeroSection() {
                   alt="3FIT Market - Seja um licenciado"
                   fill
                   className="object-contain object-center !h-32 mt-16"
-                  sizes="100vw"
+                  sizes="(max-width: 768px) 100vw, 50vw"
                   priority
                 />
               </div>

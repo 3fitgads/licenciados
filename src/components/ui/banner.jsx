@@ -27,6 +27,7 @@ export function Banner({
             src="/arrow-down.webp"
             alt=""
             fill
+            sizes="(max-width: 768px) 24px, 32px"
             className="object-contain"
           />
         </div>

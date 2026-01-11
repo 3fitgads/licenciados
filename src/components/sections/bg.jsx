@@ -95,6 +95,7 @@ export function Bg() {
               src="/bg.png"
               alt=""
               fill
+              sizes="100vw"
               className={`object-cover object-bottom ${
                 isEven ? '' : '[transform:rotate(180deg)scaleX(-1)]'
               }`}

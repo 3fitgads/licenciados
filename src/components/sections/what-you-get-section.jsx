@@ -15,6 +15,7 @@ export function WhatYouGetSection() {
             src="/freezer.webp"
             alt="Freezer 3FIT Home Office"
             fill
+            sizes="(max-width: 768px) 100vw, 50vw"
             className="object-cover md:object-contain object-left"
             priority
           />
@@ -111,6 +112,7 @@ export function WhatYouGetSection() {
             src="/freezer.webp"
             alt="Freezer 3FIT Home Office"
             fill
+            sizes="100vw"
             className="object-contain object-center"
             priority
           />
