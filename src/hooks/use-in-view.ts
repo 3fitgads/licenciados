@@ -6,17 +6,18 @@ interface UseInViewOptions {
   threshold?: number;
   rootMargin?: string;
   triggerOnce?: boolean;
+  enabled?: boolean;
 }
 
 export function useInView(options: UseInViewOptions = {}) {
-  const { threshold = 0.1, rootMargin = '0px', triggerOnce = true } = options;
+  const { threshold = 0.1, rootMargin = '0px', triggerOnce = true, enabled = true } = options;
   const [isInView, setIsInView] = useState(false);
   const [hasBeenInView, setHasBeenInView] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const element = ref.current;
-    if (!element) return;
+    if (!element || !enabled) return;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -38,7 +39,7 @@ export function useInView(options: UseInViewOptions = {}) {
     return () => {
       observer.disconnect();
     };
-  }, [threshold, rootMargin, hasBeenInView]);
+  }, [threshold, rootMargin, hasBeenInView, enabled]);
 
   return { ref, isInView: triggerOnce ? hasBeenInView : isInView };
 }

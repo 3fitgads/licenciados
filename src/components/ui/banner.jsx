@@ -1,5 +1,7 @@
 'use client';
 
+import Image from 'next/image';
+
 export function Banner({ 
   text,
   textColor = "text-[#FF8D00]",
@@ -18,6 +20,17 @@ export function Banner({
       >
         {text}
       </span>
+      {/* Arrow icon no biquinho */}
+      <div className="absolute mt-4 sm:mt-5 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-40 pointer-events-none">
+        <div className="relative w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12">
+          <Image
+            src="/arrow-down.webp"
+            alt=""
+            fill
+            className="object-contain"
+          />
+        </div>
+      </div>
       <div className="absolute top-0 left-0 w-full z-10 pointer-events-none">
         <svg
           viewBox="0 0 1200 100"

@@ -18,7 +18,7 @@ export function Header() {
       
       // No mobile, adiciona um offset extra para compensar elementos visuais
       const isMobile = window.innerWidth < 768; // md breakpoint do Tailwind
-      const extraOffset = isMobile ? 300 : 0; // Offset extra no mobile
+      const extraOffset = isMobile ? 0 : 0; // Offset extra no mobile
       
       const elementPosition = element.offsetTop;
       const offsetPosition = elementPosition - headerHeight - extraOffset;
