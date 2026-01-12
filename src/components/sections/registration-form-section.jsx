@@ -238,7 +238,7 @@ export function RegistrationFormSection() {
     const buildCalendlyUrl = () => {
       const baseUrl = 'https://calendly.com/jhonathan_galhardo/30min?hide_gdpr_banner=1';
       const params = new URLSearchParams();
-      
+
       // Adiciona parâmetros de pre-fill
       if (formData.name) {
         params.append('name', formData.name);
@@ -251,7 +251,7 @@ export function RegistrationFormSection() {
         const cleanPhone = formData.phone.replace(/\s/g, '');
         params.append('a1', cleanPhone);
       }
-      
+
       const queryString = params.toString();
       return queryString ? `${baseUrl}&${queryString}` : baseUrl;
     };
@@ -260,14 +260,17 @@ export function RegistrationFormSection() {
 
     // Scroll para o calendário quando o componente for montado
     useEffect(() => {
-      if (calendarRef.current) {
-        setTimeout(() => {
-          calendarRef.current.scrollIntoView({ 
-            behavior: 'smooth', 
-            block: 'center' 
+      setTimeout(() => {
+        if (calendarRef.current) {
+          const elementPosition = calendarRef.current.getBoundingClientRect().top + window.pageYOffset;
+          const offset = 80; // Ajuste esse valor (positivo = sobe, negativo = desce)
+
+          window.scrollTo({
+            top: elementPosition - offset,
+            behavior: 'smooth'
           });
-        }, 3000); // Aguarda a animação de sucesso completar
-      }
+        }
+      }, 3000);
     }, []);
 
     return (
@@ -315,7 +318,7 @@ export function RegistrationFormSection() {
           variants={textVariants}
           initial="initial"
           animate="animate"
-          className="space-y-3 text-center mb-6 px-6 md:px-8"
+          className="space-y-3 text-center mb-6 px-6 md:px-8 bg-white"
         >
           <h2 className="text-2xl md:text-3xl font-bold text-gray-dark">
             Cadastro Realizado com Sucesso!
@@ -332,11 +335,24 @@ export function RegistrationFormSection() {
           initial="initial"
           animate="animate"
           className="w-full bg-white rounded-2xl shadow-xl overflow-hidden"
-          style={{ minHeight: '800px', height: 'calc(100vh - 200px)' }}
+          style={{
+            height: '100vh',
+            maxHeight: '100vh',
+            overflow: 'hidden',
+            position: 'relative',
+            backgroundColor: '#FFFFFF',        
+          }}
         >
           <iframe
             src={calendlyUrl}
-            style={{ border: 0, width: '100%', height: '100%', minHeight: '800px' }}
+            style={{
+              border: 0,
+              width: '100%',
+              height: '100%',
+              overflow: 'hidden',
+              display: 'block',             
+              backgroundColor: '#FFFFFF',
+            }}
             title="Agendar Reunião"
             allowFullScreen
           />
@@ -424,9 +440,9 @@ export function RegistrationFormSection() {
               className={cn(errors.investment && 'border-red-500 focus:ring-red-500')}
             >
               <option value="">Selecione uma opção</option>
-              <option value="25-30">25.000 a 30.000</option>
-              <option value="30-50">30.000 a 50.000</option>
-              <option value="50+">Mais de 50.000</option>
+              <option value="14997-20000">14.997 a 20.000</option>
+              <option value="20000-25000">20.000 a 25.000</option>
+              <option value="30000+">+ 30.000</option>
             </Select>
             {errors.investment && (
               <p className="mt-1 text-sm text-red-500">{errors.investment}</p>
