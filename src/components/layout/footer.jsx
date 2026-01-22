@@ -95,8 +95,7 @@ export function Footer() {
             </a>
             <a href="#" className="hover:text-primary transition-colors">
               Termos de Uso
-            </a>
-            <span>Powered by Readdy</span>
+            </a>           
           </div>
         </div>
       </div>
