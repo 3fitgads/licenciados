@@ -42,7 +42,6 @@ export function DifferentialsSection() {
         </div>
       </div>
       <div className="container mx-auto px-4 lg:mt-32 mt-[6rem]">
-        {/* Title */}
         <AnimateOnScroll animation="fadeInUp" delay={0.1} duration={0.8}>
           <div className="text-center mb-8 md:mb-12">
             <h2 className="text-3xl md:text-4xl lg:text-5xl italic font-bold mb-3">
@@ -61,7 +60,6 @@ export function DifferentialsSection() {
           </div>
         </AnimateOnScroll>
 
-        {/* Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 max-w-full w-full mx-auto px-4">
           {differentials.map((differential, index) => (
             <AnimateOnScroll
@@ -72,7 +70,6 @@ export function DifferentialsSection() {
               className="md:w-[33vw] lg:w-[25vw]"
             >
               <div className="bg-white rounded-lg p-4 md:p-6 flex items-center gap-4 shadow-lg">
-                {/* Icon */}
                 <div className="w-12 h-12 md:w-14 md:h-14 flex-shrink-0 rounded-full bg-black flex items-center justify-center overflow-hidden">
                   {differential.icon ? (
                     <Image
@@ -84,7 +81,6 @@ export function DifferentialsSection() {
                     />
                   ) : null}
                 </div>
-                {/* Text */}
                 <p className="text-sm md:text-base text-black font-medium flex-1">
                   {differential.text}
                 </p>
@@ -94,14 +90,12 @@ export function DifferentialsSection() {
         </div>
       </div>
 
-      {/* Wave at bottom - Mobile only */}
       <div className="absolute bottom-0 translate-y-1 left-0 right-0 z-20 md:hidden">
         <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto">
           <path d="M0 120L60 100C120 80 240 40 360 33.3C480 26.7 600 53.3 720 66.7C840 80 960 80 1080 66.7C1200 53.3 1320 26.7 1380 13.3L1440 0V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z" fill="#FFFFFF" />
         </svg>
       </div>
 
-      {/* Wave at bottom - Desktop only */}
       <div className="absolute hidden md:block bottom-0 translate-y-1 left-0 right-0 z-20">
         <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto relative z-10">
           <path d="M0 120L60 100C120 80 240 40 360 33.3C480 26.7 600 53.3 720 66.7C840 80 960 80 1080 66.7C1200 53.3 1320 26.7 1380 13.3L1440 0V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z" fill="#FFFFFF" />

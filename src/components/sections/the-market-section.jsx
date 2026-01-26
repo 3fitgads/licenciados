@@ -43,7 +43,6 @@ function DonutChart({ percentage, index }) {
       <div className="flex flex-col items-center">
         <div ref={ref} className="relative w-32 h-32 md:w-40 md:h-40">
           <svg className="transform -rotate-90 w-full h-full" viewBox="0 0 140 140">
-            {/* Background circle */}
             <circle
               cx="70"
               cy="70"
@@ -52,7 +51,6 @@ function DonutChart({ percentage, index }) {
               stroke="#FFE5D9"
               strokeWidth="20"
             />
-            {/* Animated circle */}
             <circle
               cx="70"
               cy="70"
@@ -66,7 +64,6 @@ function DonutChart({ percentage, index }) {
               className="transition-all duration-1000 ease-out"
             />
           </svg>
-          {/* Percentage text in center */}
           <div className="absolute inset-0 flex items-center justify-center">
             <span className="text-2xl md:text-3xl font-bold text-[#FF8D00]">
               <NumberTicker value={percentage} decimalPlaces={percentage % 1 !== 0 ? 1 : 0} />
@@ -74,7 +71,6 @@ function DonutChart({ percentage, index }) {
             </span>
           </div>
         </div>
-        {/* Description text */}
         <p className="text-sm md:text-base text-black text-center mt-4 max-w-xs">
           {marketStats[index].text}
         </p>
@@ -87,7 +83,6 @@ export function TheMarketSection() {
   return (
     <section id="the-market" className="relative bg-white overflow-hidden py-12 md:py-16 scroll-mt-20">
       <div className="container mx-auto px-4">
-        {/* Title */}
         <AnimateOnScroll animation="fadeInUp" delay={0.1} duration={0.8}>
           <div className="text-center mb-6 md:mb-8">
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold italic mb-4 text-[#FF8D00]">
@@ -102,7 +97,6 @@ export function TheMarketSection() {
           </div>
         </AnimateOnScroll>
 
-        {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 max-w-3xl mx-auto mt-12">
           {marketStats.map((stat, index) => (
             <DonutChart key={index} percentage={stat.percentage} index={index} />

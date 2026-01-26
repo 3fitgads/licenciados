@@ -20,7 +20,6 @@ export function Banner({
       >
         {text}
       </span>
-      {/* Arrow icon no biquinho */}
       <div className="absolute mt-4 sm:mt-5 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-40 pointer-events-none">
         <div className="relative w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12">
           <Image
@@ -41,7 +40,6 @@ export function Banner({
             height: 'clamp(70px, 11vw, 120px)'
           }}
         >
-          {/* Path único: barra completa + biquinho centralizado integrado - sem gaps */}
           <path
             d="M0,0 L1200,0 L1200,60 L750,60 C700,60 650,100 600,100 C550,100 500,60 450,60 L0,60 Z"
             fill={fillColor}

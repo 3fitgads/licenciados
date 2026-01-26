@@ -5,7 +5,6 @@ export function Footer() {
     <footer className="bg-[#2F3E4C] text-white relative">
       <div className="container mx-auto px-4 py-10">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-          {/* Coluna 1: Logo e Descrição */}
           <div>
             <div className="mb-3">
               <Image
@@ -36,7 +35,6 @@ export function Footer() {
             </div>
           </div>
 
-          {/* Coluna 2: Links Rápidos */}
           <div>
             <h3 className="font-bold text-base mb-3">Links Rápidos</h3>
             <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
@@ -66,7 +64,6 @@ export function Footer() {
             </div>
           </div>
 
-          {/* Coluna 3: Contato */}
           <div>
             <h3 className="font-bold text-base mb-3">Contato</h3>
             <ul className="space-y-2 text-sm text-gray-300">
@@ -86,7 +83,6 @@ export function Footer() {
           </div>
         </div>
 
-        {/* Bottom Strip */}
         <div className="border-t border-gray-600 pt-4 flex flex-col md:flex-row justify-between items-center text-xs text-gray-400">
           <p>© 2026 3FIT. Todos os direitos reservados.</p>
           <div className="flex space-x-4 mt-4 md:mt-0">

@@ -7,11 +7,6 @@ const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const REGISTRATIONS_ENDPOINT =
   process.env.REGISTRATIONS_ENDPOINT || '/api/registrations';
 
-/**
- * Valida os dados do formulário de registro
- * @param {Object} formData - Dados do formulário
- * @returns {{valid: boolean, error?: string}}
- */
 function validateRegistrationData(formData) {
   const { name, email, phone, investment, startTimeline } = formData || {};
 
@@ -38,19 +33,12 @@ function validateRegistrationData(formData) {
   return { valid: true };
 }
 
-/**
- * Server Action para submeter formulário de registro
- * @param {Object} formData - Dados do formulário { name, email, phone, investment, startTimeline }
- * @returns {Promise<{success: boolean, error?: string}>}
- */
 export async function submitRegistration(formData) {
-  // Validação server-side
   const validation = validateRegistrationData(formData);
   if (!validation.valid) {
     return { success: false, error: validation.error };
   }
 
-  // Validação do endpoint
   if (!REGISTRATIONS_ENDPOINT) {
     console.error('REGISTRATIONS_ENDPOINT não configurado');
     return {
@@ -59,12 +47,10 @@ export async function submitRegistration(formData) {
     };
   }
 
-  // Prepara os dados para envio
   const { name, email, phone, investment, startTimeline } = formData;
-  
-  // Limpa o telefone: remove espaços, parênteses, traços e outros caracteres especiais
+
   const cleanPhone = phone.replace(/[\s()\-+]/g, '');
-  
+
   const payload = {
     name: name.trim(),
     email: email.trim().toLowerCase(),
@@ -73,7 +59,6 @@ export async function submitRegistration(formData) {
     startTimeline,
   };
 
-  // Faz a requisição usando o serviço genérico
   const result = await api.post(REGISTRATIONS_ENDPOINT, payload);
 
   if (!result.success) {

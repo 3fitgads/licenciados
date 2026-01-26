@@ -22,16 +22,15 @@ export function AnimateOnScroll({
   const [canObserve, setCanObserve] = useState(false);
   const { ref, isInView } = useInView({ 
     threshold: 0, 
-    rootMargin: '200px 0px 0px 0px', // Começa a animar 200px antes de entrar na viewport
+    rootMargin: '200px 0px 0px 0px',
     triggerOnce: true,
-    enabled: canObserve // Adiciona opção enabled
+    enabled: canObserve
   });
 
-  // Aguarda um pouco antes de começar a observar, para evitar animações durante scroll inicial
   useEffect(() => {
     const timer = setTimeout(() => {
       setCanObserve(true);
-    }, 500); // Delay de 500ms para permitir que a página estabilize
+    }, 500);
 
     return () => clearTimeout(timer);
   }, []);

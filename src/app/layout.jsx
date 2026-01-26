@@ -1,8 +1,6 @@
 import localFont from "next/font/local";
 import "./globals.css";
 
-import { FacebookPixel } from "../components/analytics/facebook-pixel";
-
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
@@ -35,7 +33,6 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} antialiased !overflow-x-hidden`}
       >
         {children}
-        <FacebookPixel />
       </body>
     </html>
   );

@@ -103,7 +103,6 @@ export function RegistrationFormSection() {
   const [shouldAutoFocus, setShouldAutoFocus] = useState(false);
 
   useEffect(() => {
-    // Só permite autofocus se houver hash na URL (usuário clicou em link)
     if (typeof window !== 'undefined') {
       const hasHash = window.location.hash === '#formulario';
       setShouldAutoFocus(hasHash);
@@ -127,7 +126,6 @@ export function RegistrationFormSection() {
       ...formData,
       [name]: value,
     });
-    // Clear error when user starts typing
     if (errors[name]) {
       setErrors({
         ...errors,
@@ -256,12 +254,10 @@ export function RegistrationFormSection() {
     const calendarRef = useRef(null);
     const [showCalendly, setShowCalendly] = useState(false);
 
-    // Construir URL do Calendly com pre-fill
     const buildCalendlyUrl = () => {
       const baseUrl = 'https://calendly.com/3fitgads/30min?hide_gdpr_banner=1';
       const params = new URLSearchParams();
 
-      // Adiciona parâmetros de pre-fill
       if (formData.name) {
         params.append('name', formData.name);
       }
@@ -269,7 +265,6 @@ export function RegistrationFormSection() {
         params.append('email', formData.email);
       }
       if (formData.phone) {
-        // Remove espaços e caracteres especiais do telefone
         const cleanPhone = formData.phone.replace(/\s/g, '');
         params.append('a1', cleanPhone);
       }
@@ -280,16 +275,14 @@ export function RegistrationFormSection() {
 
     const calendlyUrl = buildCalendlyUrl();
 
-    // Delay antes de mostrar o calendário (4 segundos para dar tempo de ler)
     useEffect(() => {
       const timer = setTimeout(() => {
         setShowCalendly(true);
-      }, 4000); // 4 segundos de delay
+      }, 4000);
 
       return () => clearTimeout(timer);
     }, []);
 
-    // Scroll para o calendário quando ele aparecer
     useEffect(() => {
       if (showCalendly && calendarRef.current) {
         setTimeout(() => {
@@ -312,7 +305,6 @@ export function RegistrationFormSection() {
         exit="exit"
         className="w-full flex flex-col items-center"
       >
-        {/* Animated Check Circle */}
         <div className="relative mb-6 px-6 md:px-8 pt-8">
           <motion.div
             variants={checkCircleVariants}
@@ -344,7 +336,6 @@ export function RegistrationFormSection() {
           </motion.div>
         </div>
 
-        {/* Success Message */}
         <motion.div
           variants={textVariants}
           initial="initial"
@@ -359,7 +350,6 @@ export function RegistrationFormSection() {
           </p>
         </motion.div>
 
-        {/* Calendly Iframe - só aparece após o delay */}
         {showCalendly && (
           <motion.div
             ref={calendarRef}
@@ -514,7 +504,6 @@ export function RegistrationFormSection() {
 
   return (
     <section id="formulario" className="relative py-12 pb-14 sm:pb-20 md:pb-24 lg:pb-32 scroll-mt-20 overflow-visible">
-      {/* bg.png removido - usando componente Bg global */}
       <div
         className="absolute w-full h-full -top-10 md:top-0 left-0 right-0 z-0 pointer-events-none overflow-hidden"
       >
@@ -525,7 +514,6 @@ export function RegistrationFormSection() {
 
       <div className="container mx-auto px-4 mt-2 md:mt-20 lg:mt-32 relative z-20">
         <div className="max-w-2xl mx-auto">
-          {/* Banner */}
           <AnimateOnScroll animation="fadeInDown" delay={0.1} duration={0.8}>
             <div className="bg-[#0D0D0D] rounded-t-2xl p-6 md:p-8 text-center text-white mb-0">
               <h2 className="text-2xl md:text-3xl font-bold text-[#FF8D00] mb-3">
@@ -537,7 +525,6 @@ export function RegistrationFormSection() {
             </div>
           </AnimateOnScroll>
 
-          {/* Form Card */}
           <div className="bg-white rounded-b-2xl shadow-lg overflow-hidden" style={{ transform: 'none' }}>
             <AnimatePresence mode="wait">
               {isSubmitted ? (
@@ -549,7 +536,6 @@ export function RegistrationFormSection() {
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.3 }}
                 >
-                  {/* Progress Indicator - Completely isolated from animations */}
                   <div
                     className="px-6 md:px-8 pt-6 md:pt-8"
                     style={{
@@ -560,7 +546,6 @@ export function RegistrationFormSection() {
                       zIndex: 10
                     }}
                   >
-                    {/* Progress Bar */}
                     <div className="mb-4">
                       <div className="flex justify-between items-center mb-2">
                         <span className="text-sm font-semibold text-gray-dark">
@@ -582,14 +567,12 @@ export function RegistrationFormSection() {
                       </div>
                     </div>
 
-                    {/* Progress Dots */}
                     <div className="flex justify-center gap-2 mb-6">
                       {progressDots}
                     </div>
                   </div>
 
                   <form onSubmit={handleSubmit}>
-                    {/* Step Content */}
                     <div className="px-6 md:px-8 pb-4 min-h-[120px] flex items-center" style={{ position: 'relative', overflow: 'hidden', isolation: 'isolate' }}>
                       <AnimatePresence mode="wait" custom={direction} initial={false}>
                         <motion.div
@@ -613,7 +596,6 @@ export function RegistrationFormSection() {
                       </AnimatePresence>
                     </div>
 
-                    {/* Navigation Buttons */}
                     <div className="px-6 md:px-8 pb-4 space-y-4">
                       <div className="flex gap-3 justify-between">
                         {currentStep > 1 ? (
@@ -673,14 +655,12 @@ export function RegistrationFormSection() {
         </div>
       </div>
 
-      {/* Wave at bottom - Mobile only */}
       <div className="absolute bottom-0 translate-y-1 left-0 right-0 z-20 md:hidden">
         <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto">
           <path d="M0 120L60 100C120 80 240 40 360 33.3C480 26.7 600 53.3 720 66.7C840 80 960 80 1080 66.7C1200 53.3 1320 26.7 1380 13.3L1440 0V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z" fill="#FFFFFF" />
         </svg>
       </div>
 
-      {/* Wave at bottom - Desktop only */}
       <div className="absolute hidden md:block bottom-0 translate-y-1 left-0 right-0 z-20">
         <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto relative z-10">
           <path d="M0 120L60 100C120 80 240 40 360 33.3C480 26.7 600 53.3 720 66.7C840 80 960 80 1080 66.7C1200 53.3 1320 26.7 1380 13.3L1440 0V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z" fill="#FFFFFF" />

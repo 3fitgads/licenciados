@@ -62,14 +62,10 @@ export function HeroSection() {
         </div>
       </div>
 
-
-      {/* Hero Images - Side by Side */}
       <div className="w-full z-10">
         <div className="hidden md:grid grid-cols-1 md:grid-cols-[50%_50%] w-full min-h-screen md:min-h-[500px] gap-0">
-          {/* Left Side - Title/Text Image */}
           <div className="relative w-full h-full min-h-[300px] md:min-h-[500px] flex md:items-center justify-center md:p-8 z-20">
             <div className="relative flex flex-col w-full max-w-full md:max-w-screen h-full items-center justify-center">
-              {/* Title Image on top - estrutura original mantida */}
               <div className="relative flex flex-col w-full aspect-square md:aspect-auto h-[40vh]">
                 <Image
                   src="/title-logo.png"
@@ -79,7 +75,6 @@ export function HeroSection() {
                   className="mt-10 md:mt-0 object-contain object-center z-10 !h-[70%] md:!h-[40vh]"
                   priority
                 />
-                {/* bg.png removido - usando componente Bg global */}
               </div>
               <div className="relative flex flex-col w-full aspect-square md:aspect-auto !max-h-[1vh]">
                 <Image
@@ -90,31 +85,19 @@ export function HeroSection() {
                   className="md:hidden block object-contain object-right z-10"
                   priority
                 />
-                {/* bg.png removido - usando componente Bg global */}
               </div>
 
-              {/* Textos abaixo do title-logo - Desktop only */}
               <div className="relative hidden md:flex gap-4 w-full min-w-screen text-white px-4 z-50 translate-x-2">
-                {/* Título principal */}
-
                 <div className="flex w-full items-center justify-center h-32">
                   <h2 className="text-lg md:text-xl font-bold text-center leading-tight">
-                    {/* Mobile: 4 linhas */}
                     <span className="whitespace-nowrap block">Seja dono do <span className="font-extrabold uppercase bg-black px-1 text-[#FF8D00]">SEU PRÓPRIO NEGÓCIO</span></span>
                     <span className="whitespace-nowrap block">de alimentação saudável, torne-se</span>
                     <span className="whitespace-nowrap block">hoje mesmo o mais novo licenciado da</span>
                     <span className="whitespace-nowrap block">3Fit.</span>
-
-                    {/* Desktop (md+): 3 linhas */}
-                    {/* <span className="hidden lg:block whitespace-nowrap">Seja dono do <span className="font-extrabold uppercase bg-black px-1 text-[#FF8D00]">SEU PRÓPRIO NEGÓCIO</span> de alimentação</span>
-                  <span className="hidden lg:block whitespace-nowrap">saudável, torne-se hoje mesmo o mais novo licenciado da</span>
-                  <span className="hidden lg:block whitespace-nowrap">3Fit.</span> */}
                   </h2>                
 
                 </div>
 
-
-                {/* Bullet points com ícones circulares */}
                 <div className="absolute flex h-32 w-screen sm:translate-x-12 lg:translate-x-0">                
                   <div className="absolute xl:left-1/2 md:left-auto md:-translate-x-1/2 md:-right-10 xl:right-auto flex flex-col gap-3 mt-2">
                     {advantages.map((advantage, index) => {
@@ -173,12 +156,6 @@ export function HeroSection() {
 
       </div>
 
-      {/* Wave at bottom - Desktop only */}
-      {/* <div className="absolute hidden md:block bottom-0 translate-y-1 left-0 right-0 z-20">
-        <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto relative z-10">
-          <path d="M0 120L60 100C120 80 240 40 360 33.3C480 26.7 600 53.3 720 66.7C840 80 960 80 1080 66.7C1200 53.3 1320 26.7 1380 13.3L1440 0V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z" fill="#FFFFFF" />
-        </svg>
-      </div> */}
     </section>
   );
 }

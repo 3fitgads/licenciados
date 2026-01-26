@@ -11,19 +11,16 @@ export function Header() {
     const element = document.getElementById(id);
     if (element) {
       setIsMenuOpen(false);
-      
-      // Calcula o offset baseado na altura real do header
+
       const header = document.querySelector('header');
       const headerHeight = header ? header.offsetHeight : 80;
-      
-      // No mobile, adiciona um offset extra para compensar elementos visuais
-      const isMobile = window.innerWidth < 768; // md breakpoint do Tailwind
-      const extraOffset = isMobile ? 0 : 0; // Offset extra no mobile
-      
+
+      const isMobile = window.innerWidth < 768;
+      const extraOffset = isMobile ? 0 : 0;
+
       const elementPosition = element.offsetTop;
       const offsetPosition = elementPosition - headerHeight - extraOffset;
 
-      // Usa window.scrollTo com requestAnimationFrame para garantir smooth scroll
       requestAnimationFrame(() => {
         window.scrollTo({
           top: offsetPosition,
@@ -61,7 +58,6 @@ export function Header() {
             />
           </div>
 
-          {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-6">
             {navItems.map((item) => (
               <button
@@ -77,7 +73,6 @@ export function Header() {
             </Button>
           </nav>
 
-          {/* Mobile Menu Button */}
           <div className="md:hidden flex items-center space-x-3">
             <Button variant="primary" className="text-xs py-2 px-4" onClick={handleScrollToForm}>
               INSCREVA-SE
@@ -106,7 +101,6 @@ export function Header() {
           </div>
         </div>
 
-        {/* Mobile Navigation */}
         {isMenuOpen && (
           <nav className="md:hidden mt-4 pb-4 border-t border-gray-200 pt-4">
             <div className="flex flex-col space-y-3">

@@ -24,22 +24,17 @@ export function Bg() {
             const currentHeight = parent.offsetHeight;
             const currentVh50 = window.innerHeight / 2;
             
-            // Diferença significativa para evitar flicker (mais de 200px ou primeira carga)
             const heightDiff = Math.abs(currentHeight - lastHeightRef.current);
             const isFirstLoad = lastHeightRef.current === 0;
 
             if (isFirstLoad || heightDiff > 200) {
-              // Calcula blockHeight primeiro e usa o mesmo valor para calcular reps
-              // Isso garante consistência durante o redimensionamento
               const newBlockHeight = Math.floor(currentVh50);
               const reps = Math.ceil(currentHeight / newBlockHeight);
               
-              // Atualiza sempre que necessário para garantir valores consistentes durante resize
               if (reps !== lastRepsRef.current || isFirstLoad) {
                 setNumberOfRepetitions(reps);
                 lastRepsRef.current = reps;
               }
-              // Sempre atualiza blockHeight para manter valores sincronizados durante resize
               setBlockHeight(newBlockHeight);
               lastHeightRef.current = currentHeight;
             }
@@ -49,7 +44,7 @@ export function Bg() {
         if (immediate) {
           run();
         } else {
-          timeoutRef.current = setTimeout(run, 300); // Debounce maior para estabilidade
+          timeoutRef.current = setTimeout(run, 300);
         }
       }
     };
@@ -64,7 +59,6 @@ export function Bg() {
 
     window.addEventListener('resize', () => calculateRepetitions(false));
     
-    // Chamada inicial imediata
     calculateRepetitions(true);
 
     return () => {
@@ -72,7 +66,7 @@ export function Bg() {
       window.removeEventListener('resize', () => calculateRepetitions(false));
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
     };
-  }, []); // Removida dependência de blockHeight para evitar loop de efeito
+  }, []);
 
   return (
     <div 
@@ -82,9 +76,6 @@ export function Bg() {
       {Array.from({ length: numberOfRepetitions }).map((_, index) => {
         const isEven = index % 2 === 0;
         
-        // Se ainda não calculamos o blockHeight em pixels, usamos svh como fallback inicial (mais estável no mobile)
-        // Cada elemento (exceto o primeiro) começa 1px antes do anterior para eliminar gaps
-        // A sobreposição é acumulativa: elemento 1 sobrepõe 1px, elemento 2 sobrepõe 2px, etc.
         const topPosition = blockHeight 
           ? `${index === 0 ? 0 : index * blockHeight - index}px` 
           : `${index * 50}svh`;
@@ -107,8 +98,8 @@ export function Bg() {
               className={`object-cover object-bottom ${
                 isEven ? '' : '[transform:rotate(180deg)scaleX(-1)]'
               }`}
-              priority={index < 4} // Prioridade para as primeiras 4 imagens (200vh)
-              loading={index < 6 ? 'eager' : 'lazy'} // Carregamento rápido para o topo (300vh)
+              priority={index < 4}
+              loading={index < 6 ? 'eager' : 'lazy'}
             />
           </div>
         );
