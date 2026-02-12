@@ -26,7 +26,7 @@ const differentials = [
     icon: "/icon2.webp"
   },
   {
-    text: "Parceiras com Grandes Influenciadores (Leo Stronda, Ramon Dino, Jorlan Vieira e Fernando Sardinha)",
+    text: "Parcerias com Grandes Influenciadores (Leo Stronda, Ramon Dino, Jorlan Vieira e Fernando Sardinha)",
     icon: "/icon1.webp"
   }
 ];

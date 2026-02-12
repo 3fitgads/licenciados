@@ -10,7 +10,9 @@ import { Banner } from "@/components/ui/banner";
 import { ArrowLeft, ArrowRight, Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
+import Script from 'next/script';
 import { submitRegistration } from '@/actions/submit-registration';
+import { track } from '@/lib/meta-pixel';
 
 const TOTAL_STEPS = 5;
 
@@ -205,6 +207,7 @@ export function RegistrationFormSection() {
       const result = await submitRegistration(formData);
 
       if (result?.success) {
+        track('Lead');
         setIsSubmitted(true);
       } else {
         setSubmitError(result?.error || 'Não foi possível enviar seus dados. Tente novamente.');
@@ -252,28 +255,10 @@ export function RegistrationFormSection() {
 
   const SuccessScreen = ({ formData }) => {
     const calendarRef = useRef(null);
+    const calendlyContainerRef = useRef(null);
+    const calendlyInitializedRef = useRef(false);
     const [showCalendly, setShowCalendly] = useState(false);
-
-    const buildCalendlyUrl = () => {
-      const baseUrl = 'https://calendly.com/3fitgads/30min?hide_gdpr_banner=1';
-      const params = new URLSearchParams();
-
-      if (formData.name) {
-        params.append('name', formData.name);
-      }
-      if (formData.email) {
-        params.append('email', formData.email);
-      }
-      if (formData.phone) {
-        const cleanPhone = formData.phone.replace(/\s/g, '');
-        params.append('a1', cleanPhone);
-      }
-
-      const queryString = params.toString();
-      return queryString ? `${baseUrl}&${queryString}` : baseUrl;
-    };
-
-    const calendlyUrl = buildCalendlyUrl();
+    const [isCalendlyLoaded, setIsCalendlyLoaded] = useState(false);
 
     useEffect(() => {
       const timer = setTimeout(() => {
@@ -282,6 +267,30 @@ export function RegistrationFormSection() {
 
       return () => clearTimeout(timer);
     }, []);
+
+    useEffect(() => {
+      if (!showCalendly) return;
+      if (!isCalendlyLoaded) return;
+      if (!calendlyContainerRef.current) return;
+      if (calendlyInitializedRef.current) return;
+
+      const cleanPhone = (formData?.phone ?? '').replace(/[^\d+]/g, '');
+
+      calendlyContainerRef.current.innerHTML = '';
+      window.Calendly?.initInlineWidget?.({
+        url: 'https://calendly.com/d/cxp2-7t8-pgj/nova-reuniao?primary_color=ff8d00',
+        parentElement: calendlyContainerRef.current,
+        prefill: {
+          name: formData?.name ?? '',
+          email: formData?.email ?? '',
+          customAnswers: {
+            a1: cleanPhone,
+          },
+        },
+      });
+
+      calendlyInitializedRef.current = true;
+    }, [showCalendly, isCalendlyLoaded, formData]);
 
     useEffect(() => {
       if (showCalendly && calendarRef.current) {
@@ -298,89 +307,86 @@ export function RegistrationFormSection() {
     }, [showCalendly]);
 
     return (
-      <motion.div
-        variants={successVariants}
-        initial="initial"
-        animate="animate"
-        exit="exit"
-        className="w-full flex flex-col items-center"
-      >
-        <div className="relative mb-6 px-6 md:px-8 pt-8">
-          <motion.div
-            variants={checkCircleVariants}
-            initial="initial"
-            animate="animate"
-            className="w-20 h-20 md:w-24 md:h-24 bg-primary rounded-full flex items-center justify-center mx-auto"
-          >
-            <motion.svg
-              width="40"
-              height="40"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="white"
-              strokeWidth="3"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="md:w-12 md:h-12"
-              style={{ overflow: 'visible' }}
-            >
-              <motion.path
-                d="M20 6L9 17l-5-5"
-                variants={checkIconVariants}
-                initial="initial"
-                animate="animate"
-                strokeDasharray="1"
-                strokeDashoffset="0"
-              />
-            </motion.svg>
-          </motion.div>
-        </div>
+      <>
+        <Script
+          src="https://assets.calendly.com/assets/external/widget.js"
+          strategy="afterInteractive"
+          onLoad={() => setIsCalendlyLoaded(true)}
+        />
 
         <motion.div
-          variants={textVariants}
+          variants={successVariants}
           initial="initial"
           animate="animate"
-          className="space-y-3 text-center mb-6 px-6 md:px-8 bg-white"
+          exit="exit"
+          className="w-full flex flex-col items-center"
         >
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-dark">
-            Cadastro Realizado com Sucesso!
-          </h2>
-          <p className="text-base md:text-lg text-gray-medium max-w-md mx-auto">
-            Estamos quase lá! Agende agora sua reunião de 30 minutos com um de nossos especialistas para entender todo o modelo de negócio da 3Fit
-          </p>
-        </motion.div>
+          <div className="relative mb-6 px-6 md:px-8 pt-8">
+            <motion.div
+              variants={checkCircleVariants}
+              initial="initial"
+              animate="animate"
+              className="w-20 h-20 md:w-24 md:h-24 bg-primary rounded-full flex items-center justify-center mx-auto"
+            >
+              <motion.svg
+                width="40"
+                height="40"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="white"
+                strokeWidth="3"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="md:w-12 md:h-12"
+                style={{ overflow: 'visible' }}
+              >
+                <motion.path
+                  d="M20 6L9 17l-5-5"
+                  variants={checkIconVariants}
+                  initial="initial"
+                  animate="animate"
+                  strokeDasharray="1"
+                  strokeDashoffset="0"
+                />
+              </motion.svg>
+            </motion.div>
+          </div>
 
-        {showCalendly && (
           <motion.div
-            ref={calendarRef}
             variants={textVariants}
             initial="initial"
             animate="animate"
-            className="w-full bg-white rounded-2xl shadow-xl overflow-hidden"
-            style={{
-              height: '100vh',
-              maxHeight: '100vh',
-              overflow: 'hidden',
-              position: 'relative',
-              backgroundColor: '#FFFFFF',
-            }}
+            className="space-y-3 text-center mb-6 px-6 md:px-8 bg-white"
           >
-            <iframe
-              src={calendlyUrl}
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-dark">
+              Cadastro Realizado com Sucesso!
+            </h2>
+            <p className="text-base md:text-lg text-gray-medium max-w-md mx-auto">
+              Estamos quase lá! Agende agora sua reunião de 30 minutos com um de nossos especialistas para entender todo o modelo de negócio da 3Fit
+            </p>
+          </motion.div>
+
+          {showCalendly && (
+            <motion.div
+              ref={calendarRef}
+              variants={textVariants}
+              initial="initial"
+              animate="animate"
+              className="w-full bg-white rounded-2xl shadow-xl overflow-hidden"
               style={{
-                border: 0,
-                width: '100%',
-                height: '100%',
-                overflow: 'hidden',
-                display: 'block',
+                minWidth: 320,
+                height: 700,
                 backgroundColor: '#FFFFFF',
               }}
-              title="Agendar Reunião"
-              allowFullScreen
-            />
-          </motion.div>
-        )}
-      </motion.div>
+            >
+              <div
+                ref={calendlyContainerRef}
+                style={{ width: '100%', height: '100%' }}
+              />
+            </motion.div>
+          )}
+        </motion.div>
+      </>
     );
   };
 

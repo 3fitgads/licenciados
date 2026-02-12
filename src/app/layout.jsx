@@ -1,6 +1,8 @@
 import localFont from "next/font/local";
 import "./globals.css";
 
+import MetaPixel from "@/components/analytics/meta-pixel/meta-pixel";
+
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
@@ -33,6 +35,7 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} antialiased !overflow-x-hidden`}
       >
         {children}
+        <MetaPixel />
       </body>
     </html>
   );
