@@ -13,8 +13,10 @@ import Image from 'next/image';
 import Script from 'next/script';
 import { submitRegistration } from '@/actions/submit-registration';
 import { track } from '@/lib/meta-pixel';
+import { STATE_CITY_MAP } from '@/lib/state-city.map';
+import { Combobox } from '@/components/ui/combobox';
 
-const TOTAL_STEPS = 5;
+const TOTAL_STEPS = 6;
 
 const stepVariants = {
   enter: (direction) => ({
@@ -104,6 +106,19 @@ export function RegistrationFormSection() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [shouldAutoFocus, setShouldAutoFocus] = useState(false);
 
+  const formatPhone = (digits) => {
+    const d = (digits ?? '').replace(/\D/g, '').slice(0, 11);
+    const ddd = d.slice(0, 2);
+    const part1 = d.length > 10 ? d.slice(2, 7) : d.slice(2, 6);
+    const part2 = d.length > 10 ? d.slice(7, 11) : d.slice(6, 10);
+
+    if (!d) return '';
+    if (d.length <= 2) return `(${ddd}`;
+    if (d.length <= 6) return `(${ddd}) ${d.slice(2)}`;
+    if (d.length <= 10) return `(${ddd}) ${part1}${part2 ? `-${part2}` : ''}`;
+    return `(${ddd}) ${part1}${part2 ? `-${part2}` : ''}`;
+  };
+
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const hasHash = window.location.hash === '#formulario';
@@ -114,6 +129,8 @@ export function RegistrationFormSection() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    state: '',
+    city: '',
     phone: '',
     investment: '',
     startTimeline: '',
@@ -124,6 +141,23 @@ export function RegistrationFormSection() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+
+    if (name === 'phone') {
+      const digits = value.replace(/\D/g, '').slice(0, 11);
+      const masked = formatPhone(digits);
+      setFormData({
+        ...formData,
+        phone: masked,
+      });
+      if (errors.phone) {
+        setErrors({
+          ...errors,
+          phone: '',
+        });
+      }
+      return;
+    }
+
     setFormData({
       ...formData,
       [name]: value,
@@ -155,18 +189,27 @@ export function RegistrationFormSection() {
         }
         break;
       case 3:
-        if (!formData.phone.trim()) {
+        const phoneDigits = formData.phone.replace(/\D/g, '');
+        if (!phoneDigits) {
           newErrors.phone = 'WhatsApp é obrigatório';
-        } else if (!/^[\d\s()+-]+$/.test(formData.phone.replace(/\s/g, ''))) {
-          newErrors.phone = 'Formato de telefone inválido';
+        } else if (phoneDigits.length !== 11) {
+          newErrors.phone = 'Informe um WhatsApp com 11 números (DDD + número)';
         }
         break;
       case 4:
+        if (!formData.state) {
+          newErrors.state = 'Selecione um estado';
+        }
+        if (!formData.city) {
+          newErrors.city = 'Selecione uma cidade';
+        }
+        break;
+      case 5:
         if (!formData.investment) {
           newErrors.investment = 'Selecione uma opção de investimento';
         }
         break;
-      case 5:
+      case 6:
         if (!formData.startTimeline) {
           newErrors.startTimeline = 'Selecione quando pretende iniciar';
         }
@@ -393,6 +436,9 @@ export function RegistrationFormSection() {
   };
 
   const renderStep = () => {
+    const states = Object.keys(STATE_CITY_MAP).sort((a, b) => a.localeCompare(b));
+    const citiesForState = formData.state ? (STATE_CITY_MAP[formData.state] ?? []) : [];
+
     switch (currentStep) {
       case 1:
         return (
@@ -450,6 +496,8 @@ export function RegistrationFormSection() {
               value={formData.phone}
               onChange={handleChange}
               className={cn(errors.phone && 'border-red-500 focus:ring-red-500')}
+              inputMode="numeric"
+              autoComplete="tel"
               autoFocus={shouldAutoFocus && currentStep === 3}
             />
             {errors.phone && (
@@ -458,6 +506,53 @@ export function RegistrationFormSection() {
           </div>
         );
       case 4:
+        return (
+          <div className="w-full">
+            <div className="grid grid-cols-1 sm:grid-cols-[2fr_3fr] gap-3">
+              <div>
+                <label htmlFor="state" className="block text-gray-dark font-semibold mb-1.5 text-sm">
+                  Estado (UF) *
+                </label>
+                <Combobox
+                  value={formData.state}
+                  onChange={(nextState) => {
+                    setFormData((prev) => ({ ...prev, state: nextState, city: '' }));
+                    if (errors.state || errors.city) {
+                      setErrors((prev) => ({ ...prev, state: '', city: '' }));
+                    }
+                  }}
+                  options={states.map((uf) => ({ value: uf, label: uf }))}
+                  placeholder="Selecione"
+                  inputClassName={cn(errors.state && 'border-red-500 focus:ring-red-500')}
+                />
+                {errors.state && (
+                  <p className="mt-1 text-sm text-red-500">{errors.state}</p>
+                )}
+              </div>
+
+              <div>
+                <label htmlFor="city" className="block text-gray-dark font-semibold mb-1.5 text-sm">
+                  Cidade *
+                </label>
+                <Combobox
+                  value={formData.city}
+                  onChange={(nextCity) => {
+                    setFormData((prev) => ({ ...prev, city: nextCity }));
+                    if (errors.city) setErrors((prev) => ({ ...prev, city: '' }));
+                  }}
+                  options={citiesForState.map((city) => ({ value: city, label: city }))}
+                  placeholder={formData.state ? "Selecione" : "Selecione um estado"}
+                  disabled={!formData.state}
+                  inputClassName={cn(errors.city && 'border-red-500 focus:ring-red-500')}
+                />
+                {errors.city && (
+                  <p className="mt-1 text-sm text-red-500">{errors.city}</p>
+                )}
+              </div>
+            </div>
+          </div>
+        );
+      case 5:
         return (
           <div className="w-full">
             <label htmlFor="investment" className="block text-gray-dark font-semibold mb-1.5 text-sm">
@@ -480,7 +575,7 @@ export function RegistrationFormSection() {
             )}
           </div>
         );
-      case 5:
+      case 6:
         return (
           <div className="w-full">
             <label htmlFor="startTimeline" className="block text-gray-dark font-semibold mb-1.5 text-sm">
@@ -492,7 +587,7 @@ export function RegistrationFormSection() {
               value={formData.startTimeline}
               onChange={handleChange}
               className={cn(errors.startTimeline && 'border-red-500 focus:ring-red-500')}
-              autoFocus={shouldAutoFocus && currentStep === 5}
+              autoFocus={shouldAutoFocus && currentStep === 6}
             >
               <option value="">Selecione uma opção</option>
               <option value="Imediatamente">Imediatamente</option>

@@ -84,13 +84,15 @@ export async function submitRegistration(formData) {
     };
   }
 
-  const { name, email, phone, investment, startTimeline } = formData;
+  const { name, email, state, city, phone, investment, startTimeline } = formData;
 
   const cleanPhone = phone.replace(/[\s()\-+]/g, '');
 
   const payload = {
     name: name.trim(),
     email: email.trim().toLowerCase(),
+    state,
+    city,
     phone: cleanPhone,
     investment,
     startTimeline,
