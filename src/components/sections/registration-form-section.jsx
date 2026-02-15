@@ -319,8 +319,10 @@ export function RegistrationFormSection() {
       if (!calendlyContainerRef.current) return;
       if (calendlyInitializedRef.current) return;
 
-      const cleanPhone = (formData?.phone ?? '').replace(/[^\d+]/g, '');
+      const phoneDigits = (formData?.phone ?? '').replace(/\D/g, '');
+      const brPhoneE164 = `+55${phoneDigits}`;
 
+      // https://calendly.com/d/cxp2-7t8-pgj/nova-reuniao?primary_color=ff8d00
       calendlyContainerRef.current.innerHTML = '';
       window.Calendly?.initInlineWidget?.({
         url: 'https://calendly.com/d/cxp2-7t8-pgj/nova-reuniao?primary_color=ff8d00',
@@ -328,8 +330,9 @@ export function RegistrationFormSection() {
         prefill: {
           name: formData?.name ?? '',
           email: formData?.email ?? '',
+          smsReminderNumber: brPhoneE164,
           customAnswers: {
-            a1: cleanPhone,
+            a1: brPhoneE164,
           },
         },
       });
