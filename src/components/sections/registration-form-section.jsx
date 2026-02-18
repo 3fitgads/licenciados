@@ -15,6 +15,8 @@ import { submitRegistration } from '@/actions/submit-registration';
 import { track } from '@/lib/meta-pixel';
 import { STATE_CITY_MAP } from '@/lib/state-city.map';
 import { Combobox } from '@/components/ui/combobox';
+import { PhoneInput } from '@/components/ui/phone-input';
+import { parsePhoneNumber } from 'react-phone-number-input';
 
 const TOTAL_STEPS = 6;
 
@@ -106,18 +108,6 @@ export function RegistrationFormSection() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [shouldAutoFocus, setShouldAutoFocus] = useState(false);
 
-  const formatPhone = (digits) => {
-    const d = (digits ?? '').replace(/\D/g, '').slice(0, 11);
-    const ddd = d.slice(0, 2);
-    const part1 = d.length > 10 ? d.slice(2, 7) : d.slice(2, 6);
-    const part2 = d.length > 10 ? d.slice(7, 11) : d.slice(6, 10);
-
-    if (!d) return '';
-    if (d.length <= 2) return `(${ddd}`;
-    if (d.length <= 6) return `(${ddd}) ${d.slice(2)}`;
-    if (d.length <= 10) return `(${ddd}) ${part1}${part2 ? `-${part2}` : ''}`;
-    return `(${ddd}) ${part1}${part2 ? `-${part2}` : ''}`;
-  };
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -132,6 +122,7 @@ export function RegistrationFormSection() {
     state: '',
     city: '',
     phone: '',
+    countryCode: '55',
     investment: '',
     startTimeline: '',
   });
@@ -141,22 +132,6 @@ export function RegistrationFormSection() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
-    if (name === 'phone') {
-      const digits = value.replace(/\D/g, '').slice(0, 11);
-      const masked = formatPhone(digits);
-      setFormData({
-        ...formData,
-        phone: masked,
-      });
-      if (errors.phone) {
-        setErrors({
-          ...errors,
-          phone: '',
-        });
-      }
-      return;
-    }
 
     setFormData({
       ...formData,
@@ -168,6 +143,64 @@ export function RegistrationFormSection() {
         [name]: '',
       });
     }
+  };
+
+  const handlePhoneChange = (value) => {
+    // Always clear error when user types
+    if (errors.phone) {
+      setErrors((prev) => ({
+        ...prev,
+        phone: '',
+      }));
+    }
+
+    if (!value) {
+      setFormData((prev) => ({
+        ...prev,
+        phone: '',
+      }));
+      return;
+    }
+
+    // O valor vem como E164 (+5519999999999)
+    // Extrai APENAS os dígitos do número nacional
+    let phoneDigits = '';
+    
+    try {
+      const phoneNumber = parsePhoneNumber(value);
+      if (phoneNumber && phoneNumber.nationalNumber) {
+        // Salva APENAS os dígitos do número nacional (sem formatação)
+        phoneDigits = phoneNumber.nationalNumber.replace(/\D/g, '');
+      }
+    } catch (error) {
+      // Se parse falhar, continua para o fallback
+    }
+
+    // Se não conseguiu extrair com parse, usa fallback manual
+    if (!phoneDigits) {
+      const allDigits = value.replace(/\D/g, '');
+      const currentCountryCode = formData.countryCode?.replace(/\D/g, '') || '55';
+      
+      // Remove o código do país se estiver no início
+      if (allDigits.length > currentCountryCode.length && allDigits.startsWith(currentCountryCode)) {
+        phoneDigits = allDigits.slice(currentCountryCode.length);
+      } else {
+        phoneDigits = allDigits;
+      }
+    }
+    
+    // SEMPRE salva os dígitos, mesmo que incompletos
+    setFormData((prev) => ({
+      ...prev,
+      phone: phoneDigits,
+    }));
+  };
+
+  const handleCountryCodeChange = (countryCode) => {
+    setFormData((prev) => ({
+      ...prev,
+      countryCode: countryCode || '55',
+    }));
   };
 
   const validateStep = (step) => {
@@ -189,11 +222,25 @@ export function RegistrationFormSection() {
         }
         break;
       case 3:
-        const phoneDigits = formData.phone.replace(/\D/g, '');
-        if (!phoneDigits) {
+        // Valida se o telefone foi preenchido
+        const phoneValue = formData.phone || '';
+        const phoneDigits = phoneValue.replace(/\D/g, '');
+        
+        // Verifica se está vazio ou tem menos de 8 dígitos
+        if (!phoneDigits || phoneDigits.length === 0 || phoneDigits.length < 8) {
           newErrors.phone = 'WhatsApp é obrigatório';
-        } else if (phoneDigits.length !== 11) {
-          newErrors.phone = 'Informe um WhatsApp com 11 números (DDD + número)';
+        } else {
+          try {
+            // Construct E164 format: +countryCode + phone digits
+            const countryCode = formData.countryCode?.replace(/\D/g, '') || '55';
+            const fullPhoneValue = `+${countryCode}${phoneDigits}`;
+            const phoneNumber = parsePhoneNumber(fullPhoneValue);
+            if (!phoneNumber || !phoneNumber.isValid()) {
+              newErrors.phone = 'Informe um número de telefone válido';
+            }
+          } catch (error) {
+            newErrors.phone = 'Informe um número de telefone válido';
+          }
         }
         break;
       case 4:
@@ -224,12 +271,16 @@ export function RegistrationFormSection() {
 
   const handleNext = (e) => {
     e?.preventDefault?.();
-    if (validateStep(currentStep)) {
-      if (currentStep < TOTAL_STEPS) {
-        setDirection(1);
-        setErrors({});
-        setCurrentStep(currentStep + 1);
-      }
+    const isValid = validateStep(currentStep);
+    if (!isValid) {
+      // Não avança se houver erros - os erros já foram setados em validateStep
+      return;
+    }
+    // Só avança se não houver erros
+    if (currentStep < TOTAL_STEPS) {
+      setDirection(1);
+      setErrors({});
+      setCurrentStep(currentStep + 1);
     }
   };
 
@@ -320,7 +371,8 @@ export function RegistrationFormSection() {
       if (calendlyInitializedRef.current) return;
 
       const phoneDigits = (formData?.phone ?? '').replace(/\D/g, '');
-      const brPhoneE164 = `+55${phoneDigits}`;
+      const countryCode = formData?.countryCode || '55';
+      const phoneE164 = phoneDigits ? `+${countryCode}${phoneDigits}` : '';
 
       // https://calendly.com/d/cxp2-7t8-pgj/nova-reuniao?primary_color=ff8d00
       calendlyContainerRef.current.innerHTML = '';
@@ -330,9 +382,9 @@ export function RegistrationFormSection() {
         prefill: {
           name: formData?.name ?? '',
           email: formData?.email ?? '',
-          smsReminderNumber: brPhoneE164,
+          smsReminderNumber: phoneE164,
           customAnswers: {
-            a1: brPhoneE164,
+            a1: phoneE164,
           },
         },
       });
@@ -491,16 +543,16 @@ export function RegistrationFormSection() {
             <label htmlFor="phone" className="block text-gray-dark font-semibold mb-1.5 text-sm">
               WhatsApp *
             </label>
-            <Input
+            <PhoneInput
               id="phone"
               name="phone"
-              type="tel"
-              placeholder="Digite seu WhatsApp"
-              value={formData.phone}
-              onChange={handleChange}
-              className={cn(errors.phone && 'border-red-500 focus:ring-red-500')}
-              inputMode="numeric"
-              autoComplete="tel"
+              defaultCountry="BR"
+              value={formData.countryCode && formData.phone && formData.phone.trim() 
+                ? `+${formData.countryCode}${formData.phone.replace(/\D/g, '')}` 
+                : undefined}
+              onChange={handlePhoneChange}
+              onCountryCodeChange={handleCountryCodeChange}
+              className={cn(errors.phone && '[&_input]:border-red-500 [&_input]:focus:ring-red-500')}
               autoFocus={shouldAutoFocus && currentStep === 3}
             />
             {errors.phone && (

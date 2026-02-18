@@ -1,26 +1,9 @@
 "use client"
 
 import { useEffect, useMemo, useRef, useState } from "react"
-import { motion, MotionProps, useInView } from "framer-motion"
+import { motion, useInView } from "framer-motion"
 
 import { cn } from "@/lib/utils"
-
-interface TypingAnimationProps extends MotionProps {
-  children?: string
-  words?: string[]
-  className?: string
-  duration?: number
-  typeSpeed?: number
-  deleteSpeed?: number
-  delay?: number
-  pauseDelay?: number
-  loop?: boolean
-  as?: React.ElementType
-  startOnView?: boolean
-  showCursor?: boolean
-  blinkCursor?: boolean
-  cursorStyle?: "line" | "block" | "underscore"
-}
 
 export function TypingAnimation({
   children,
@@ -38,15 +21,15 @@ export function TypingAnimation({
   blinkCursor = true,
   cursorStyle = "line",
   ...props
-}: TypingAnimationProps) {
+}) {
   const MotionComponent = motion(Component)
 
-  const [displayedText, setDisplayedText] = useState<string>("")
+  const [displayedText, setDisplayedText] = useState("")
   const [currentWordIndex, setCurrentWordIndex] = useState(0)
   const [currentCharIndex, setCurrentCharIndex] = useState(0)
-  const [phase, setPhase] = useState<"typing" | "pause" | "deleting">("typing")
-  const elementRef = useRef<HTMLElement | null>(null)
-  const isInView = useInView(elementRef as React.RefObject<Element>, {
+  const [phase, setPhase] = useState("typing")
+  const elementRef = useRef(null)
+  const isInView = useInView(elementRef, {
     amount: 0.3,
     once: true,
   })

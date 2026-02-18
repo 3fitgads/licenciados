@@ -6,9 +6,7 @@ import { createPortal } from "react-dom";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
-import type { ComboboxOption, ComboboxProps } from "./combobox.type";
-
-function normalizeText(value: string): string {
+function normalizeText(value) {
   return value
     .normalize("NFD")
     .replace(/\p{Diacritic}/gu, "")
@@ -25,13 +23,13 @@ export function Combobox({
   className,
   inputClassName,
   listClassName,
-}: ComboboxProps) {
-  const rootRef = useRef<HTMLDivElement | null>(null);
-  const listRef = useRef<HTMLDivElement | null>(null);
-  const inputRef = useRef<HTMLInputElement | null>(null);
+}) {
+  const rootRef = useRef(null);
+  const listRef = useRef(null);
+  const inputRef = useRef(null);
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
-  const [anchorRect, setAnchorRect] = useState<DOMRect | null>(null);
+  const [anchorRect, setAnchorRect] = useState(null);
 
   const selectedLabel = useMemo(() => {
     return options.find((o) => o.value === value)?.label ?? "";
@@ -51,8 +49,8 @@ export function Combobox({
   }, [options, query]);
 
   useEffect(() => {
-    function onPointerDown(e: MouseEvent) {
-      const target = e.target as Node;
+    function onPointerDown(e) {
+      const target = e.target;
       if (rootRef.current?.contains(target)) return;
       if (listRef.current?.contains(target)) return;
       setOpen(false);
@@ -80,7 +78,7 @@ export function Combobox({
     };
   }, [open]);
 
-  const handleSelect = (nextValue: string) => {
+  const handleSelect = (nextValue) => {
     onChange(nextValue);
     setOpen(false);
     requestAnimationFrame(() => {
@@ -124,7 +122,7 @@ export function Combobox({
             }
             if (e.key === "Escape") {
               setOpen(false);
-              (e.target as HTMLInputElement).blur();
+              e.target.blur();
             }
           }}
         />
@@ -191,4 +189,3 @@ export function Combobox({
     </div>
   );
 }
-

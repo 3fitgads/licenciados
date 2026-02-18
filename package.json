@@ -9,14 +9,21 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@radix-ui/react-popover": "^1.1.15",
+    "@radix-ui/react-scroll-area": "^1.2.10",
     "@upstash/ratelimit": "^2.0.8",
     "@upstash/redis": "^1.36.2",
     "clsx": "^2.1.1",
+    "cmdk": "^1.1.1",
+    "country-flag-icons": "^1.6.13",
     "framer-motion": "^12.24.12",
+    "intl-tel-input": "^26.4.0",
     "lucide-react": "^0.562.0",
     "next": "14.2.15",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "react-phone-number-input": "^3.4.14",
+    "world-countries": "^5.1.0"
   },
   "devDependencies": {
     "eslint": "^8",

@@ -1,12 +1,6 @@
 'use client';
 import { cn } from '@/lib/utils';
-import React, { ReactNode } from 'react';
-
-interface AuroraBackgroundProps extends React.HTMLProps<HTMLDivElement> {
-  children?: ReactNode;
-  showRadialGradient?: boolean;
-  colorScheme?: 'default' | 'orange';
-}
+import React from 'react';
 
 export const AuroraBackground = ({
   className,
@@ -14,7 +8,7 @@ export const AuroraBackground = ({
   showRadialGradient = true,
   colorScheme = 'default',
   ...props
-}: AuroraBackgroundProps) => {
+}) => {
   const isOrange = colorScheme === 'orange';
   
   return (

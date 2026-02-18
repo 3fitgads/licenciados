@@ -84,9 +84,10 @@ export async function submitRegistration(formData) {
     };
   }
 
-  const { name, email, state, city, phone, investment, startTimeline } = formData;
+  const { name, email, state, city, phone, countryCode, investment, startTimeline } = formData;
 
-  const cleanPhone = phone.replace(/[\s()\-+]/g, '');
+  // Limpa o telefone removendo caracteres não numéricos
+  const cleanPhone = phone ? phone.replace(/[\s()\-+]/g, '') : '';
 
   const payload = {
     name: name.trim(),
@@ -94,6 +95,7 @@ export async function submitRegistration(formData) {
     state,
     city,
     phone: cleanPhone,
+    countryCode: countryCode || '55', // Inclui o código do país
     investment,
     startTimeline,
   };

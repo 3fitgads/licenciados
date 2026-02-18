@@ -1,17 +1,9 @@
 "use client";
 
-import { ComponentPropsWithoutRef, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useInView, useMotionValue, useSpring } from "framer-motion";
 
 import { cn } from "@/lib/utils";
-
-interface NumberTickerProps extends ComponentPropsWithoutRef<"span"> {
-  value: number;
-  startValue?: number;
-  direction?: "up" | "down";
-  delay?: number;
-  decimalPlaces?: number;
-}
 
 export function NumberTicker({
   value,
@@ -21,8 +13,8 @@ export function NumberTicker({
   className,
   decimalPlaces = 0,
   ...props
-}: NumberTickerProps) {
-  const ref = useRef<HTMLSpanElement>(null);
+}) {
+  const ref = useRef(null);
   const motionValue = useMotionValue(direction === "down" ? value : startValue);
   const springValue = useSpring(motionValue, {
     damping: 60,

@@ -2,18 +2,11 @@
 
 import { useEffect, useRef, useState } from 'react';
 
-interface UseInViewOptions {
-  threshold?: number;
-  rootMargin?: string;
-  triggerOnce?: boolean;
-  enabled?: boolean;
-}
-
-export function useInView(options: UseInViewOptions = {}) {
+export function useInView(options = {}) {
   const { threshold = 0.1, rootMargin = '0px', triggerOnce = true, enabled = true } = options;
   const [isInView, setIsInView] = useState(false);
   const [hasBeenInView, setHasBeenInView] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
+  const ref = useRef(null);
 
   useEffect(() => {
     const element = ref.current;
