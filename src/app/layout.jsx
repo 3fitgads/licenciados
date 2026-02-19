@@ -30,6 +30,8 @@ export const viewport = {
   interactiveWidget: "resizes-content",
 };
 
+export const dynamic = 'force-static';
+
 export default function RootLayout({ children }) {
   return (
     <html lang="pt-BR">

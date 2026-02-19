@@ -30,7 +30,8 @@ export async function apiRequest(endpoint, options = {}) {
   const fetchOptions = {
     method,
     headers: defaultHeaders,
-    cache: 'no-store',
+    // Use cache for GET requests to reduce edge requests, but keep no-store for mutations
+    cache: method === 'GET' ? 'default' : 'no-store',
   };
 
   if (body && method !== 'GET') {

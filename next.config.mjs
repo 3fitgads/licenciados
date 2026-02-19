@@ -29,7 +29,7 @@ const nextConfig = {
   // Increasing this reduces repeat requests, but keep it conservative to avoid stale images
   // if you replace files while keeping the same filenames.
   images: {
-    minimumCacheTTL: 60 * 60 * 24, // 1 day
+    minimumCacheTTL: 60 * 60 * 24 * 7, // 7 days - increased to reduce edge requests
   },
 };
 
