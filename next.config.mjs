@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: "standalone",
   // Reduce repeat downloads on returning visits by allowing long-lived browser caching
   // for assets served from /public (e.g. /logo.png). When changing a file, prefer
   // versioning the filename (e.g. logo.v2.png) to avoid clients keeping old cache.
